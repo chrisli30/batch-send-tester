@@ -21,6 +21,9 @@
   "dependencies": {
     "dotenv": "^8.2.0",
     "inquirer": "^7.3.3",
-    "web3": "^1.2.11"
+    "moment": "^2.27.0",
+    "spinnies": "^0.5.1",
+    "web3": "^1.2.11",
+    "winston": "^3.3.3"
   }
 }

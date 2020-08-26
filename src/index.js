@@ -141,14 +141,14 @@ async function sendSignedTransaction({ web3, signedTransaction, trackTx, complet
         .once('receipt', function (receipt) {
             Logger.debug('sendSignedTransaction receipt event, receipt: %O, tarckTx: %O', receipt, trackTx);
         })
-        .on('confirmation', function (confNumber, receipt) {
+        .once('confirmation', function (confNumber, receipt) {
             trackTx.confirmedAt = moment().format();
             trackTx.status = 'Confirmed';
             Logger.debug('sendSignedTransaction confirmation event, receipt: %O, tarckTx: %O', receipt, trackTx);
 
             completeHandler({ completeTarget, needSendTxCount, trackTxs });
         })
-        .on('error', function (error) {
+        .once('error', function (error) {
             trackTx.status = 'Failed';
             Logger.error('sendSignedTransaction error event, tarckTx: %O, error: %s', trackTx, error.stack);
 
@@ -186,8 +186,12 @@ function tarckSetHandler(obj, prop, value) {
 
 function completeHandler({ completeTarget, needSendTxCount, trackTxs }) {
     completeTarget.count++;
-    if (completeTarget.count === needSendTxCount) {
-        fs.writeFileSync('./output/data.json', JSON.stringify(trackTxs, null, 2), 'utf-8');
+    if (completeTarget.count >= needSendTxCount) {
+        const dir = './output';
+        if (!fs.existsSync(dir)) {
+            fs.mkdirSync(dir);
+        }
+        fs.writeFileSync(`${dir}/data.json`, JSON.stringify(trackTxs, null, 2), 'utf-8');
         spinnies.succeed('spinner-target', { text: 'output/data.json is generated' });
     }
     return;

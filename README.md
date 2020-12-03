@@ -1,4 +1,5 @@
 # batch-send-tester
+Code used to send 10 transactions simultaneously from one account. 
 
 ## Usage
 1. update .env file based on .env.example
